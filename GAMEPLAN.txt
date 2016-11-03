@@ -1,0 +1,78 @@
+GAME PLAN
+
+/*
+ * Robot
+ *
+ */
+
+// Stats
+maxHealth
+maxPower
+speed
+attack
+
+// State
+health
+power
+position xy
+direction
+action
+
+// Actions
+move forward
+move backward
+turn left
+turn right
+attack
+self desctruct
+upgrade
+repair
+
+
+/*
+ * Items
+ *
+ */
+
+point beacon
+
+repair kit
+
+attack upgrade
+health upgrade
+power upgrade
+speed upgrade
+
+weapons
+
+
+/*
+ * Environment
+ *
+ */
+
+walls (blocks movement and attacks)
+fences  (blocks movement)
+conveyor belts (moves robot)
+death pits (kills robot)
+
+
+/*
+ * Grid
+ *
+ */
+
+robots
+items
+enviroments
+
+
+/*
+ * Game
+ *
+ */
+
+score
+game time
+turn time
+  

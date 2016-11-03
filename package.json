@@ -1,0 +1,30 @@
+{
+  "name": "robo_gladiators",
+  "version": "1.0.0",
+  "description": "![GitHub Game Off 2016 Theme is Hacking, Modding, or Augmenting](https://cloud.githubusercontent.com/assets/121322/19498019/d8827370-9543-11e6-82d8-6da822b6147b.png)",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilesa/game-off-2016.git"
+  },
+  "author": "Andrew Giles",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gilesa/game-off-2016/issues"
+  },
+  "homepage": "https://github.com/gilesa/game-off-2016#readme",
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-util": "^3.0.7",
+    "gulp-webserver": "^0.9.1",
+    "lodash.assign": "^4.2.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  }
+}
