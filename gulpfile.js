@@ -11,7 +11,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var webserver = require('gulp-webserver');
 
 var customOpts = {
-    entries: [ './js/game.js' ],
+    entries: [ './src/game.js' ],
     debug: true
 };
 var b = browserify( customOpts ); 
@@ -21,11 +21,11 @@ var w = watchify(browserify(opts));
 function bundle() {
     return w.bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source('bundle.js'))
+        .pipe(source('robo.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./js'));
+        .pipe(gulp.dest('./'));
 }
 
 gulp.task( 'default', [], function() {
@@ -35,3 +35,5 @@ gulp.task( 'default', [], function() {
 
     bundle();
 } );
+
+w.on( 'update', bundle );
