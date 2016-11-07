@@ -37,6 +37,11 @@ function Robot() {
     // self desctruct
     // upgrade
     // repair
+
+    this.status = {
+        health: this.health,
+        power: this.power
+    }
 }
 
 Robot.prototype.move = function( direction ) {

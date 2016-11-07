@@ -7,10 +7,42 @@
 </head>
 <body>
 
-<h1>Robo Gladiators</h1>
-
 <div id="main">
-    
+    <canvas id="canvas">Your browser is not supported.</canvas>
+
+    <div id="gui">
+
+        <h3>SCORE</h3>
+        <ol id="score">
+        </ol>
+
+        <h3>TURN</h3>
+        <div id="timer">
+            Click when ready!
+        </div>
+
+        <div id="controls">
+            <h3>CONTROLS</h3>
+
+            <div @click="action( 'forward' )">Forward</div>
+            <div @click="action( 'backward' )">Backward</div>
+            <div @click="action( 'left' )">Left</div>
+            <div @click="action( 'right' )">Right</div>
+            <div @click="action( 'attack' )">Attack</div>
+            <div @click="action( 'suicide' )">Self Destruct</div>
+        </div>
+
+        <div id="actions">
+            <div class="action" v-for="action in actions">{{ action }}</div>
+        </div>
+
+        <div id="stats">
+            <div class="health">{{ player.health }}</div>
+            <div class="power">{{ player.power }}</div>
+            <div class="weapon">{{ player.weapon }}</div>
+        </div>
+
+    </div>
 </div>   
 
 </div>
