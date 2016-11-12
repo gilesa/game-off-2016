@@ -15,13 +15,18 @@ function init() {
 	    el: '#gui',
 	    data: data,
 	    methods: {
-	    	action: action
+	    	addAction: addAction,
+	    	removeAction: removeAction
 	    }
 	} );
 }
 
-function action( action ) {
+function addAction( action ) {
 	data.actions.push( action );
+}
+
+function removeAction( index ) {
+	data.actions.splice( index, 1 );
 }
 
 function setPlayer( player ) {

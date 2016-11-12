@@ -13,9 +13,7 @@ function init() {
     } );
     console.log( grid );
 
-    gui.setPlayer( player.status );
-    player.health = 99;
-    console.log( player.status );
+    gui.setPlayer( player.status() );
 }
 
 init();

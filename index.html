@@ -4,6 +4,8 @@
     <meta charset="utf-8">
 
     <title>Robo Gladiators</title>
+
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -21,24 +23,24 @@
             Click when ready!
         </div>
 
-        <div id="controls">
-            <h3>CONTROLS</h3>
-
-            <div @click="action( 'forward' )">Forward</div>
-            <div @click="action( 'backward' )">Backward</div>
-            <div @click="action( 'left' )">Left</div>
-            <div @click="action( 'right' )">Right</div>
-            <div @click="action( 'attack' )">Attack</div>
-            <div @click="action( 'suicide' )">Self Destruct</div>
-        </div>
-
         <div id="actions">
-            <div class="action" v-for="action in actions">{{ action }}</div>
+            <div class="controls">
+                <div class="action forward" @click="addAction( 'forward' )"></div>
+                <div class="action left" @click="addAction( 'left' )"></div>
+                <div class="action right" @click="addAction( 'right' )"></div>
+                <div class="action attack" @click="addAction( 'attack' )"></div>
+                <div class="action backward" @click="addAction( 'backward' )"></div>
+                <div class="action suicide" @click="addAction( 'suicide' )"></div>
+            </div>
+
+            <div class="list">
+                <div v-for="( action, index ) in actions" :class="[ 'action', action ]" @click="removeAction( index )"></div>
+            </div>
         </div>
 
         <div id="stats">
-            <div class="health">{{ player.health }}</div>
-            <div class="power">{{ player.power }}</div>
+            <div class="health" :style="{ width: player.health + '%' }"></div>
+            <div class="power" :style="{ width: player.power + '%' }"></div>
             <div class="weapon">{{ player.weapon }}</div>
         </div>
 

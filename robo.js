@@ -7853,8 +7853,10 @@ function Robot() {
     // self desctruct
     // upgrade
     // repair
+}
 
-    this.status = {
+Robot.prototype.status = function() {
+    return {
         health: this.health,
         power: this.power
     }
@@ -7913,9 +7915,7 @@ function init() {
     } );
     console.log( grid );
 
-    gui.setPlayer( player.status );
-    player.health = 99;
-    console.log( player.status );
+    gui.setPlayer( player.status() );
 }
 
 init();
@@ -7938,13 +7938,18 @@ function init() {
 	    el: '#gui',
 	    data: data,
 	    methods: {
-	    	action: action
+	    	addAction: addAction,
+	    	removeAction: removeAction
 	    }
 	} );
 }
 
-function action( action ) {
+function addAction( action ) {
 	data.actions.push( action );
+}
+
+function removeAction( index ) {
+	data.actions.splice( index, 1 );
 }
 
 function setPlayer( player ) {

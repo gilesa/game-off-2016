@@ -37,8 +37,10 @@ function Robot() {
     // self desctruct
     // upgrade
     // repair
+}
 
-    this.status = {
+Robot.prototype.status = function() {
+    return {
         health: this.health,
         power: this.power
     }
