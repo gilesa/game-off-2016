@@ -1,6 +1,7 @@
 #main {
   display: flex;
   width: 100%;
+  font-family: sans-serif;
 }
 #canvas {
   display: table-cell;
@@ -66,16 +67,39 @@
 #actions .list .action {
   float: none;
 }
-#stats {
+#stats .stat {
+  position: relative;
   background-color: grey;
-}
-#stats div {
   height: 12px;
 }
-#stats .health {
-  background-color: red;
+#stats .stat .current {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
-#stats .power {
-  background-color: blue;
+#stats .stat .action {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  z-index: 2;
+}
+#stats .health .current {
+  background-color: #ff0000;
+}
+#stats .power .current {
+  background-color: #6666ff;
+}
+#stats .power .action {
+  background-color: #0000ff;
+}
+#msg {
+  margin: 24px;
+  text-align: center;
+  text-transform: uppercase;
 }
 /*# sourceMappingURL=style.map */

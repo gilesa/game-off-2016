@@ -25,23 +25,27 @@
 
         <div id="actions">
             <div class="controls">
-                <div class="action forward" @click="addAction( 'forward' )"></div>
-                <div class="action left" @click="addAction( 'left' )"></div>
-                <div class="action right" @click="addAction( 'right' )"></div>
-                <div class="action attack" @click="addAction( 'attack' )"></div>
-                <div class="action backward" @click="addAction( 'backward' )"></div>
-                <div class="action suicide" @click="addAction( 'suicide' )"></div>
+                <div v-for="( value, action ) in controls" :class="[ 'action', action ]" @mouseenter="previewAction( value.power )" @mouseleave="endPreview( true )" @click="addAction( action )"></div>
             </div>
 
             <div class="list">
-                <div v-for="( action, index ) in actions" :class="[ 'action', action ]" @click="removeAction( index )"></div>
+                <div v-for="( action, index ) in actions" :class="[ 'action', action ]" @mouseenter="previewAction( -controls[ action ].power )" @mouseleave="endPreview()" @click="removeAction( index )"></div>
             </div>
         </div>
 
         <div id="stats">
-            <div class="health" :style="{ width: player.health + '%' }"></div>
-            <div class="power" :style="{ width: player.power + '%' }"></div>
+            <div class="stat health">
+                <div class="current" :style="{ width: player.health + '%' }"></div>
+            </div>
+            <div class="stat power">
+                <div class="current" :style="{ width: player.previewPower1 + '%' }"></div>
+                <div class="action" :style="{ width: player.previewPower2 + '%' }"></div>
+            </div>
             <div class="weapon">{{ player.weapon }}</div>
+        </div>
+
+        <div id="msg">
+            {{ msg }}
         </div>
 
     </div>

@@ -39,6 +39,33 @@ function Robot() {
     // repair
 }
 
+Robot.prototype.ACTIONS = {
+    forward: {
+        callback: function() { this.moveForward(); },
+        power: 20
+    },
+    left: {
+        callback: function() { this.turnLeft(); },
+        power: 20
+    },
+    right: {
+        callback: function() { this.turnRight(); },
+        power: 20
+    },
+    attack: {
+        callback: function() { this.attack(); },
+        power: 40
+    },
+    backward: {
+        callback: function() { this.moveBackward(); },
+        power: 20
+    },
+    suicide: {
+        callback: function() { this.suicide(); },
+        power: 100
+    }
+}
+
 Robot.prototype.status = function() {
     return {
         health: this.health,

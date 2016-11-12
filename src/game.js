@@ -13,6 +13,7 @@ function init() {
     } );
     console.log( grid );
 
+    gui.loadControls( player.ACTIONS );
     gui.setPlayer( player.status() );
 }
 
