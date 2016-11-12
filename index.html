@@ -10,13 +10,15 @@
 <body>
 
 <div id="main">
-    <canvas id="canvas">Your browser is not supported.</canvas>
+    <div class="canvas">
+        <canvas id="canvas">Your browser is not supported.</canvas>
+    </div>
 
     <div id="gui">
 
         <h3>SCORE</h3>
         <div id="score">
-            <div class="player" v-for="player in players">
+            <div class="player" v-for="player in players" :style="{ backgroundColor: player.colour }">
                 <div class="score">{{ player.score }}</div>
                 <div class="name">{{ player.name }}</div>
             </div>

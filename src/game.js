@@ -1,15 +1,19 @@
 var gui = require( './gui.js' );
+var renderer = require( './renderer.js' );
 var Grid = require( './Grid.js' );
 var Player = require( './Player.js' );
 
 function init() {
-    var player = new Player( 'Player 1' );
+    var player = new Player( {
+        name: 'Player 1',
+        colour: '#fffa00'
+    } );
+
     var grid = new Grid( {
-        width: 100,
-        height: 100,
+        width: 20,
+        height: 20,
         robots: [ player.robot ]
     } );
-    console.log( grid );
 
     gui.init( {
         controls: player.robot.ACTIONS,
@@ -18,6 +22,10 @@ function init() {
         endTurn: function() {
             console.log( 'End Turn' );
         }
+    } );
+
+    renderer.init( {
+        grid: grid
     } );
 }
 

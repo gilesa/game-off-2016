@@ -10,7 +10,10 @@ var DIRS = {
     W: -1
 }
 
-function Robot() {
+function Robot( opts ) {
+    opts = opts || {};
+    this.colour = opts.colour || '#000000';
+
     // Stats
     this.maxHealth = 100;
     this.maxPower = 100;

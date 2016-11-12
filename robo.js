@@ -7777,30 +7777,29 @@ return Vue$2;
 
 function Grid( opts ) {
     opts = opts || {};
-    width = opts.width || 0;
-    height = opts.height || 0;
-    robots = opts.robots || [];
-    enviroments = opts.enviroments || [];
-    items = opts.items || [];
+    this.width = opts.width || 0;
+    this.height = opts.height || 0;
+    this.robots = opts.robots || [];
+    this.enviroments = opts.enviroments || [];
+    this.items = opts.items || [];
 
     var positions = [];
-    for( var x = 0; x < width; x++ ) {
+    for( var x = 0; x < this.width; x++ ) {
         positions[ x ] = [];
-        for( var y = 0; y < height; y++ ) {
+        for( var y = 0; y < this.height; y++ ) {
             positions[ x ][ y ] = new Position();
         }
     }
 
-    robots.forEach( function( robot ) {
+    this.robots.forEach( function( robot ) {
         positions[ robot.position.x ][ robot.position.y ].robot = robot;
     } );
-    enviroments.forEach( function( enviroment ) {
+    this.enviroments.forEach( function( enviroment ) {
         positions[ enviroment.x ][ enviroment.y ].enviroment = enviroment;
     } );
-    items.forEach( function( item ) {
+    this.items.forEach( function( item ) {
         positions[ item.x ][ item.y ].item = item;
     } );
-
 
     this.positions = positions;
 }
@@ -7816,10 +7815,14 @@ module.exports = Grid;
 },{}],3:[function(require,module,exports){
 var Robot = require( './Robot.js' );
 
-function Player( name ) {
-	this.name = name;
+function Player( opts ) {
+	opts = opts || {};
+	this.name = opts.name || '';
+	this.colour = opts.colour || '#000000';
 	this.score = 0;
-	this.robot = new Robot();
+	this.robot = new Robot( {
+		colour: this.colour
+	} );
 }
 
 module.exports = Player;
@@ -7837,7 +7840,10 @@ var DIRS = {
     W: -1
 }
 
-function Robot() {
+function Robot( opts ) {
+    opts = opts || {};
+    this.colour = opts.colour || '#000000';
+
     // Stats
     this.maxHealth = 100;
     this.maxPower = 100;
@@ -7939,17 +7945,21 @@ module.exports = Robot;
 
 },{}],5:[function(require,module,exports){
 var gui = require( './gui.js' );
+var renderer = require( './renderer.js' );
 var Grid = require( './Grid.js' );
 var Player = require( './Player.js' );
 
 function init() {
-    var player = new Player( 'Player 1' );
+    var player = new Player( {
+        name: 'Player 1',
+        colour: '#fffa00'
+    } );
+
     var grid = new Grid( {
-        width: 100,
-        height: 100,
+        width: 20,
+        height: 20,
         robots: [ player.robot ]
     } );
-    console.log( grid );
 
     gui.init( {
         controls: player.robot.ACTIONS,
@@ -7959,11 +7969,15 @@ function init() {
             console.log( 'End Turn' );
         }
     } );
+
+    renderer.init( {
+        grid: grid
+    } );
 }
 
 init();
 
-},{"./Grid.js":2,"./Player.js":3,"./gui.js":6}],6:[function(require,module,exports){
+},{"./Grid.js":2,"./Player.js":3,"./gui.js":6,"./renderer.js":7}],6:[function(require,module,exports){
 var Vue = require( 'vue/dist/vue.js' );
 
 var gui;
@@ -8069,7 +8083,90 @@ module.exports = {
 	init: init
 }
 
-},{"vue/dist/vue.js":1}]},{},[5])
+},{"vue/dist/vue.js":1}],7:[function(require,module,exports){
+var canvas;
+var ctx;
+
+var CELL_SIZE = 30;
+var CELL_HALF = Math.round( CELL_SIZE / 2 );
+
+function init( opts ) {
+	canvas = document.getElementById( 'canvas' );
+	ctx = canvas.getContext( '2d' );
+
+	opts = opts || {};
+
+	var grid = opts.grid || {
+		width: 0,
+		height: 0,
+		positions: []
+	};
+
+	canvas.width = grid.width * CELL_SIZE;
+	canvas.height = grid.height * CELL_SIZE;
+
+	for( var x = 0; x <= grid.width; x++ ) {
+		drawLine( 'x', x );
+	}
+	for( var y = 0; y <= grid.height; y++ ) {
+		drawLine( 'y', y );
+	}
+
+	for( var x = 0; x < grid.positions.length; x++ ) {
+		for( var y = 0; y < grid.positions[ x ].length; y++ ) {
+			var pos = grid.positions[ x ][ y ];
+			if( pos.environment ) {
+				drawEnironment( pos.environment, x, y );
+			}
+			if( pos.item ) {
+				drawItem( pos.item, x, y );
+			}
+			if( pos.robot ) {
+				drawRobot( pos.robot, x, y );
+			}
+		}
+	}
+}
+
+function drawLine( axis, cell ) {
+	position = cell * CELL_SIZE;
+	
+	ctx.strokeStyle = '#AAAAAA';
+	ctx.beginPath();
+
+	if( axis == 'x' ) {
+		ctx.moveTo( position, 0 );
+		ctx.lineTo( position, canvas.width );
+	}
+	else {
+		ctx.moveTo( 0, position );
+		ctx.lineTo( canvas.height, position );
+	}
+
+	ctx.stroke();
+}
+
+function drawEnironment( environment, x, y ) {
+
+}
+
+function drawItem( item, x, y ) {
+
+}
+
+function drawRobot( robot, x, y ) {
+	ctx.strokeStyle = robot.colour;
+	ctx.fillStyle = robot.colour;
+	ctx.beginPath();
+	ctx.arc( x + CELL_HALF, y + CELL_HALF, CELL_HALF, 0, Math.PI * 2 );
+	ctx.fill();
+}
+
+module.exports = {
+	init: init
+}
+
+},{}]},{},[5])
 
 
 //# sourceMappingURL=robo.js.map
