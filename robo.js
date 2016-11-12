@@ -7957,9 +7957,11 @@ var data = {
 	actions: [],
 	player: {
 		health: 0,
-		power: 0,
-		previewPower1: 0,
-		previewPower2: 0,
+		power: {
+			value: 0,
+			bar: 0,
+			faded: 0
+		},
 		weapon: ''
 	},
 	msg: ''
@@ -7988,39 +7990,39 @@ function flashMessage( msg, time ) {
 
 function previewAction( power ) {
 	if( power > 0 ) {
-		data.player.previewPower2 -= power;
+		data.player.power.bar -= power;
 	}
 	else {
-		data.player.previewPower1 -= power;
+		data.player.power.faded -= power;
 	}
 }
 
-function endPreview( resetPreview ) {
-	if( resetPreview ) {
-		data.player.previewPower2 = data.player.previewPower1;
-	}
-	else {
-		data.player.previewPower1 = data.player.previewPower2;
-	}
+function endPreview() {
+	data.player.power.bar = data.player.power.value;
+	data.player.power.faded = data.player.power.value;
 }
 
 function addAction( action ) {
 	var power = data.controls[ action ].power;
-	if( data.player.power < power ) {
+	if( data.player.power.value < power ) {
 		return flashMessage( 'Not enough power!' );
 	}
 
 	data.actions.push( action );
-	data.player.power -= power;
-	data.player.previewPower1 -= power;
-	data.player.previewPower2 -= power;
+	data.player.power.value -= power;
+	data.player.power.bar -= power;
+	data.player.power.faded -= power;
 }
 
 function removeAction( index ) {
 	var action = data.actions.splice( index, 1 );
-	data.player.power += data.controls[ action ].power;
-	data.player.previewPower1 += data.controls[ action ].power;
-	data.player.previewPower2 += data.controls[ action ].power;
+	var power = data.controls[ action ].power;
+	data.player.power.value += power;
+	data.player.power.bar = data.player.power.value;
+
+	if( index < data.actions.length ) {
+		data.player.power.faded = data.player.power.value + data.controls[ data.actions[ index ] ].power;
+	}
 }
 
 function loadControls( controls ) {
@@ -8029,9 +8031,9 @@ function loadControls( controls ) {
 
 function setPlayer( player ) {
 	data.player.health = player.health;
-	data.player.power = player.power;
-	data.player.previewPower1 = player.power;
-	data.player.previewPower2 = player.power;
+	data.player.power.value = player.power;
+	data.player.power.bar = player.power;
+	data.player.power.faded = player.power;
 }
 
 module.exports = {

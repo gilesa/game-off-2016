@@ -25,7 +25,7 @@
 
         <div id="actions">
             <div class="controls">
-                <div v-for="( value, action ) in controls" :class="[ 'action', action ]" @mouseenter="previewAction( value.power )" @mouseleave="endPreview( true )" @click="addAction( action )"></div>
+                <div v-for="( value, action ) in controls" :class="[ 'action', action ]" @mouseenter="previewAction( value.power )" @mouseleave="endPreview()" @click="addAction( action )"></div>
             </div>
 
             <div class="list">
@@ -35,11 +35,11 @@
 
         <div id="stats">
             <div class="stat health">
-                <div class="current" :style="{ width: player.health + '%' }"></div>
+                <div class="bar" :style="{ width: player.health + '%' }"></div>
             </div>
             <div class="stat power">
-                <div class="current" :style="{ width: player.previewPower1 + '%' }"></div>
-                <div class="action" :style="{ width: player.previewPower2 + '%' }"></div>
+                <div class="bar" :style="{ width: player.power.bar + '%' }"></div>
+                <div class="bar faded" :style="{ width: player.power.faded + '%' }"></div>
             </div>
             <div class="weapon">{{ player.weapon }}</div>
         </div>
