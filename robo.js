@@ -7814,6 +7814,17 @@ function Position() {
 module.exports = Grid;
 
 },{}],3:[function(require,module,exports){
+var Robot = require( './Robot.js' );
+
+function Player( name ) {
+	this.name = name;
+	this.score = 0;
+	this.robot = new Robot();
+}
+
+module.exports = Player;
+
+},{"./Robot.js":4}],4:[function(require,module,exports){
 /*
  * Robot
  *
@@ -7926,36 +7937,42 @@ Robot.prototype.selfDestruct = function() {
 
 module.exports = Robot;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var gui = require( './gui.js' );
 var Grid = require( './Grid.js' );
-var Robot = require( './Robot.js' );
+var Player = require( './Player.js' );
 
 function init() {
-    gui.init();
-
-    var player = new Robot();
+    var player = new Player( 'Player 1' );
     var grid = new Grid( {
         width: 100,
         height: 100,
-        robots: [ player ]
+        robots: [ player.robot ]
     } );
     console.log( grid );
 
-    gui.loadControls( player.ACTIONS );
-    gui.setPlayer( player.status() );
+    gui.init( {
+        controls: player.robot.ACTIONS,
+        players: [ player ],
+        robot: player.robot.status(),
+        endTurn: function() {
+            console.log( 'End Turn' );
+        }
+    } );
 }
 
 init();
 
-},{"./Grid.js":2,"./Robot.js":3,"./gui.js":5}],5:[function(require,module,exports){
+},{"./Grid.js":2,"./Player.js":3,"./gui.js":6}],6:[function(require,module,exports){
 var Vue = require( 'vue/dist/vue.js' );
 
 var gui;
 var data = {
+	timer: 100,
+	players: [],
 	controls: [],
 	actions: [],
-	player: {
+	robot: {
 		health: 0,
 		power: {
 			value: 0,
@@ -7966,8 +7983,11 @@ var data = {
 	},
 	msg: ''
 }
+var endTurnCallback;
 
-function init() {
+function init( opts ) {
+	opts = opts || {};
+
 	gui = new Vue( {
 	    el: '#gui',
 	    data: data,
@@ -7975,9 +7995,25 @@ function init() {
 	    	previewAction: previewAction,
 	    	endPreview: endPreview,
 	    	addAction: addAction,
-	    	removeAction: removeAction
+	    	removeAction: removeAction,
+	    	endTurn: endTurn
 	    }
 	} );
+
+	data.controls = opts.controls || {};
+
+	data.players = opts.players || [];
+
+	opts.robot = opts.robot || {
+		health: 0,
+		power: 0
+	}
+	data.robot.health = opts.robot.health;
+	data.robot.power.value = opts.robot.power;
+	data.robot.power.bar = opts.robot.power;
+	data.robot.power.faded = opts.robot.power;
+
+	endTurnCallback = opts.endTurn || function() {};
 }
 
 function flashMessage( msg, time ) {
@@ -7990,59 +8026,50 @@ function flashMessage( msg, time ) {
 
 function previewAction( power ) {
 	if( power > 0 ) {
-		data.player.power.bar -= power;
+		data.robot.power.bar -= power;
 	}
 	else {
-		data.player.power.faded -= power;
+		data.robot.power.faded -= power;
 	}
 }
 
 function endPreview() {
-	data.player.power.bar = data.player.power.value;
-	data.player.power.faded = data.player.power.value;
+	data.robot.power.bar = data.robot.power.value;
+	data.robot.power.faded = data.robot.power.value;
 }
 
 function addAction( action ) {
 	var power = data.controls[ action ].power;
-	if( data.player.power.value < power ) {
+	if( data.robot.power.value < power ) {
 		return flashMessage( 'Not enough power!' );
 	}
 
 	data.actions.push( action );
-	data.player.power.value -= power;
-	data.player.power.bar -= power;
-	data.player.power.faded -= power;
+	data.robot.power.value -= power;
+	data.robot.power.bar -= power;
+	data.robot.power.faded -= power;
 }
 
 function removeAction( index ) {
 	var action = data.actions.splice( index, 1 );
 	var power = data.controls[ action ].power;
-	data.player.power.value += power;
-	data.player.power.bar = data.player.power.value;
+	data.robot.power.value += power;
+	data.robot.power.bar = data.robot.power.value;
 
 	if( index < data.actions.length ) {
-		data.player.power.faded = data.player.power.value + data.controls[ data.actions[ index ] ].power;
+		data.robot.power.faded = data.robot.power.value + data.controls[ data.actions[ index ] ].power;
 	}
 }
 
-function loadControls( controls ) {
-	data.controls = controls;
-}
-
-function setPlayer( player ) {
-	data.player.health = player.health;
-	data.player.power.value = player.power;
-	data.player.power.bar = player.power;
-	data.player.power.faded = player.power;
+function endTurn() {
+	endTurnCallback();
 }
 
 module.exports = {
-	init: init,
-	loadControls: loadControls,
-	setPlayer: setPlayer
+	init: init
 }
 
-},{"vue/dist/vue.js":1}]},{},[4])
+},{"vue/dist/vue.js":1}]},{},[5])
 
 
 //# sourceMappingURL=robo.js.map

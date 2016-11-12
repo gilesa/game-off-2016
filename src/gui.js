@@ -2,9 +2,11 @@ var Vue = require( 'vue/dist/vue.js' );
 
 var gui;
 var data = {
+	timer: 100,
+	players: [],
 	controls: [],
 	actions: [],
-	player: {
+	robot: {
 		health: 0,
 		power: {
 			value: 0,
@@ -15,8 +17,11 @@ var data = {
 	},
 	msg: ''
 }
+var endTurnCallback;
 
-function init() {
+function init( opts ) {
+	opts = opts || {};
+
 	gui = new Vue( {
 	    el: '#gui',
 	    data: data,
@@ -24,9 +29,25 @@ function init() {
 	    	previewAction: previewAction,
 	    	endPreview: endPreview,
 	    	addAction: addAction,
-	    	removeAction: removeAction
+	    	removeAction: removeAction,
+	    	endTurn: endTurn
 	    }
 	} );
+
+	data.controls = opts.controls || {};
+
+	data.players = opts.players || [];
+
+	opts.robot = opts.robot || {
+		health: 0,
+		power: 0
+	}
+	data.robot.health = opts.robot.health;
+	data.robot.power.value = opts.robot.power;
+	data.robot.power.bar = opts.robot.power;
+	data.robot.power.faded = opts.robot.power;
+
+	endTurnCallback = opts.endTurn || function() {};
 }
 
 function flashMessage( msg, time ) {
@@ -39,54 +60,45 @@ function flashMessage( msg, time ) {
 
 function previewAction( power ) {
 	if( power > 0 ) {
-		data.player.power.bar -= power;
+		data.robot.power.bar -= power;
 	}
 	else {
-		data.player.power.faded -= power;
+		data.robot.power.faded -= power;
 	}
 }
 
 function endPreview() {
-	data.player.power.bar = data.player.power.value;
-	data.player.power.faded = data.player.power.value;
+	data.robot.power.bar = data.robot.power.value;
+	data.robot.power.faded = data.robot.power.value;
 }
 
 function addAction( action ) {
 	var power = data.controls[ action ].power;
-	if( data.player.power.value < power ) {
+	if( data.robot.power.value < power ) {
 		return flashMessage( 'Not enough power!' );
 	}
 
 	data.actions.push( action );
-	data.player.power.value -= power;
-	data.player.power.bar -= power;
-	data.player.power.faded -= power;
+	data.robot.power.value -= power;
+	data.robot.power.bar -= power;
+	data.robot.power.faded -= power;
 }
 
 function removeAction( index ) {
 	var action = data.actions.splice( index, 1 );
 	var power = data.controls[ action ].power;
-	data.player.power.value += power;
-	data.player.power.bar = data.player.power.value;
+	data.robot.power.value += power;
+	data.robot.power.bar = data.robot.power.value;
 
 	if( index < data.actions.length ) {
-		data.player.power.faded = data.player.power.value + data.controls[ data.actions[ index ] ].power;
+		data.robot.power.faded = data.robot.power.value + data.controls[ data.actions[ index ] ].power;
 	}
 }
 
-function loadControls( controls ) {
-	data.controls = controls;
-}
-
-function setPlayer( player ) {
-	data.player.health = player.health;
-	data.player.power.value = player.power;
-	data.player.power.bar = player.power;
-	data.player.power.faded = player.power;
+function endTurn() {
+	endTurnCallback();
 }
 
 module.exports = {
-	init: init,
-	loadControls: loadControls,
-	setPlayer: setPlayer
+	init: init
 }

@@ -7,7 +7,6 @@
 }
 
 #canvas {
-	display: table-cell;
 	flex: 1;
 }
 
@@ -16,6 +15,52 @@
 	border-left: 1px solid black;
 	padding: 12px;
 	vertical-align: top;
+}
+
+#score {
+	margin: 24px 0;
+
+	.player {
+		display: flex;
+		height: 36px;
+		line-height: 36px;
+		background-color: grey;
+	}
+	
+	.score {
+		width: 24px;
+		height: 100%;
+		text-align: center;
+		color: white;
+		background-color: #AAAAAA;
+	}
+
+	.name {
+		flex: 1;
+		height: 100%;
+		padding: 0 6px;
+	}
+}
+
+#timer {
+	background-color: grey;
+	height: 24px;
+	line-height: 24px;
+	color: white;
+	text-transform: uppercase;
+	text-align: center;
+	font-size: 14px;
+	cursor: pointer;
+
+	.bar {
+		background-color: #00AA00;
+		width: 100%;
+		height: 100%;
+
+		&:hover {
+			background-color: #006600;
+		}
+	}
 }
 
 #actions {

@@ -1,20 +1,24 @@
 var gui = require( './gui.js' );
 var Grid = require( './Grid.js' );
-var Robot = require( './Robot.js' );
+var Player = require( './Player.js' );
 
 function init() {
-    gui.init();
-
-    var player = new Robot();
+    var player = new Player( 'Player 1' );
     var grid = new Grid( {
         width: 100,
         height: 100,
-        robots: [ player ]
+        robots: [ player.robot ]
     } );
     console.log( grid );
 
-    gui.loadControls( player.ACTIONS );
-    gui.setPlayer( player.status() );
+    gui.init( {
+        controls: player.robot.ACTIONS,
+        players: [ player ],
+        robot: player.robot.status(),
+        endTurn: function() {
+            console.log( 'End Turn' );
+        }
+    } );
 }
 
 init();
